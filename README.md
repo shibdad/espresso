@@ -1,6 +1,8 @@
 # Espresso ☕
 
-Keeps your Mac awake and your Teams/Webex status green.
+For healthy adults, the safe recommended dietary intake (RDI) of caffeine is up to 400 mg per day. What if you wanted more?
+
+Keeps your Mac awake and your status green on your favorite communication applications (Teams).
 
 Like [KeepingYouAwake](https://github.com/newmarcel/KeepingYouAwake), but with a mouse jiggle to prevent collaboration apps from flipping you to Away.
 
@@ -18,8 +20,8 @@ On first use of mouse jiggle you'll get a prompt for Accessibility permission �
 
 ## What it does
 
-- Runs `caffeinate` in the background to prevent sleep
-- Moves the mouse 1px every 4 minutes so Teams/Webex doesn't go idle
+- Runs `caffeinate` as a sub process to prevent sleep
+- Moves the mouse randomly every 5–45 seconds to maintain active presence in Teams, Webex, Slack, etc.
 - Sits in the menu bar, stays out of your way
 
 ---
