@@ -1,0 +1,59 @@
+name: Build and Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Select Xcode
+        run: sudo xcode-select -s /Applications/Xcode.app
+
+      - name: Build archive
+        run: |
+          xcodebuild \
+            -scheme Espresso \
+            -configuration Release \
+            -archivePath build/Espresso.xcarchive \
+            archive \
+            CODE_SIGN_IDENTITY="" \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_ALLOWED=NO
+
+      - name: Export app
+        run: |
+          xcodebuild \
+            -exportArchive \
+            -archivePath build/Espresso.xcarchive \
+            -exportPath build/export \
+            -exportOptionsPlist ExportOptions.plist
+
+      - name: Install create-dmg
+        run: brew install create-dmg
+
+      - name: Create DMG
+        run: |
+          create-dmg \
+            --volname "Espresso" \
+            --window-size 540 380 \
+            --icon-size 128 \
+            --icon "Espresso.app" 140 190 \
+            --hide-extension "Espresso.app" \
+            --app-drop-link 400 190 \
+            "build/Espresso.dmg" \
+            "build/export/Espresso.app"
+
+      - name: Upload to GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: build/Espresso.dmg
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
